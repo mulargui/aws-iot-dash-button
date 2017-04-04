@@ -7,7 +7,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && apt-get -y -qq install 
 	nodejs-legacy \
 	npm \
 	awscli
-#	groff
 	
 RUN npm install --save \
 	aws-iot-device-sdk \

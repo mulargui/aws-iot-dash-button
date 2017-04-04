@@ -1,4 +1,6 @@
 
+//https://github.com/aws/aws-iot-device-sdk-js/blob/master/README.md#device
+
 var awsIot = require('aws-iot-device-sdk');
 
 var device = awsIot.device({
@@ -10,28 +12,30 @@ var device = awsIot.device({
 	debug: true
 });
 
-//
-// Device is an instance returned by mqtt.Client(), see mqtt.js for full
-// documentation.
-//
+
 device.on('connect', function() {
 	console.log('Connected!');
-    //device.subscribe('Click');
+	
+	//we subscribe to our own event to get confirmation of delivery
+    device.subscribe('Click');
+	
+	//send a click!
 	device.publish(process.env.event, JSON.stringify({ID : process.env.clientId, clicked : 'single'}));
-	//wait 250 msg till the message is sent
-	setTimeout(function() {
-		console.log('Message sent!');
-		device.end();
-		process.exit();
-	}, 250);
 });
 
 device.on('message', function(topic, payload) {
+	//received confirmation of click sent
 	console.log('message', topic, payload.toString());
+	
+	//end nicely, close the connection
+	device.end();
 });
 	
 device.on('close', function() {
 	console.log('close');
+	
+	//ending after the connection is closed
+	process.exit(1);
 });
 
 device.on('reconnect', function() {
