@@ -28,7 +28,6 @@ aws iam detach-role-policy --role-name $IAM_ROLE --policy-arn arn:aws:iam::${AWS
 aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/$IAM_POLICY
 aws iam delete-role --role-name $IAM_ROLE
 
-
 subscriptionarn=$(aws sns list-subscriptions-by-topic --topic-arn arn:aws:sns:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:$SNS_TOPIC_NAME --query 'Subscriptions[0].SubscriptionArn')
 aws sns unsubscribe --subscription-arn $subscriptionarn
 aws sns delete-topic --topic-arn arn:aws:sns:$AWS_DEFAULT_REGION:$AWS_ACCOUNT_ID:$SNS_TOPIC_NAME

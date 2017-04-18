@@ -13,8 +13,6 @@ RUN npm install --save \
 	aws-sdk
 
 ENV NODE_PATH=/usr/local/lib/node_modules
- 
-EXPOSE 80
 
 # By default, simply start the app
 #CMD exec ../run.sh

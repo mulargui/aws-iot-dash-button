@@ -3,21 +3,22 @@
 
 var awsIot = require('aws-iot-device-sdk');
 
+set debugmode = true;
+
 var device = awsIot.device({
 	keyPath: process.env.keyPath,
 	certPath: process.env.certPath,
 	caPath: process.env.caPath,
 	clientId: process.env.clientId,
 	region: process.env.region,
-	debug: true
+	debug: debugmode
 });
 
-
 device.on('connect', function() {
-	console.log('Connected!');
+	if (debugmode) console.log('Connected!');
 	
 	//we subscribe to our own event to get confirmation of delivery
-    device.subscribe('Click');
+	device.subscribe(process.env.event);
 	
 	//send a click!
 	device.publish(process.env.event, JSON.stringify({ID : process.env.clientId, clicked : 'single'}));
@@ -32,20 +33,20 @@ device.on('message', function(topic, payload) {
 });
 	
 device.on('close', function() {
-	console.log('close');
+	if (debugmode) console.log('close');
 	
 	//ending after the connection is closed
 	process.exit(1);
 });
 
 device.on('reconnect', function() {
-	console.log('reconnect');
+	if (debugmode) console.log('reconnect');
 });
 
 device.on('offline', function() {
-	console.log('offline');
+	if (debugmode) console.log('offline');
 });
 
 device.on('error', function(error) {
-	console.log('error', error);
+	if (debugmode) console.log('error', error);
 });
